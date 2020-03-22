@@ -18,10 +18,8 @@ ESP32でEtherCATマスター(SOEM)を動作させます。ESP32とW5500をSPI接
 | IO18 (VSPI SCK)  | SCLK |
 | IO5  (VSPI SS)   | SCSn |  
 
-<!--
 ## 動画
-[![](https://img.youtube.com/vi/0t5lHCy8NLg/0.jpg)](https://www.youtube.com/watch?v=0t5lHCy8NLg)
--->
+[![](https://img.youtube.com/vi/E-bh-TJOit4/0.jpg)](https://www.youtube.com/watch?v=E-bh-TJOit4)
 
 ## EtherCATによるロボットアーム制御
 このプロジェクトは下記のプロジェクトをベースにしています。EtherCATとロボットアーム制御に関してはこちらを参照してください。
@@ -29,7 +27,7 @@ ESP32でEtherCATマスター(SOEM)を動作させます。ESP32とW5500をSPI接
 - [ArduinoでEtherCATのデモ](https://github.com/lipoyang/Arduino_de_EtherCAT)
 
 ## ファイル構成
-- `WinEtherCAT/` : Windows用モニタ/コントロールアプリ
+- `RobotArmMonitor/` : Windows用モニタ/コントロールアプリ
 - `ESP32_EtherCAT_WiFi/` : ESP32のソース (Arduinoベース)
 	- `ESP32_EtherCAT_WiFi.ino` : スケッチ本体
 	- `ethercat.cpp` : EtherCAT通信処理とロボットアーム制御
