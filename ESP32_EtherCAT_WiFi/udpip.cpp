@@ -90,7 +90,7 @@ void udpSendFunc(void *arg)
             //printf("send D\n");
             // 送信
             udp.beginPacket(remoteAddress, RemotePort);
-            udp.write(send_buf, strlen((const char*)send_buf));
+            udp.write(send_buf, sizeof(send_buf));
             udp.endPacket();
         }
         if(reqAliveCommand){
@@ -103,7 +103,7 @@ void udpSendFunc(void *arg)
             printf("send A\n");
             // 送信
             udp.beginPacket(remoteAddress, RemotePort);
-            udp.write(send_buf, strlen((const char*)send_buf));
+            udp.write(send_buf, sizeof(send_buf));
             udp.endPacket();
         }
         vTaskDelay(10 / portTICK_PERIOD_MS);
