@@ -7,7 +7,7 @@ using SharpDX;
 using SharpDX.DirectInput;
 using System.Windows.Forms; // MessageBox
 
-namespace WinMangoCAT
+namespace RobotArmMonitor
 {
     // ゲームパッド入力値
     class GamepadInput

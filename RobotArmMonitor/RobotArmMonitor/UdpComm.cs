@@ -8,7 +8,7 @@ using System.Net.Sockets; // UdpClient
 using System.Threading; // Thread
 using System.Windows.Forms; // MessageBox
 
-namespace WinMangoCAT
+namespace RobotArmMonitor
 {
     // UDP受信イベントハンドラ
     class UdpEventArgs : EventArgs
