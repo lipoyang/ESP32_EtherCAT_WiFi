@@ -7,7 +7,14 @@
 #include <ESPmDNS.h>
 #include <WiFiUDP.h>
 
-// APのSSIDとパスワード
+// mDNSを使用するか？
+#define USE_MDNS
+
+// モード
+static const wifi_mode_t WIFI_MODE = WIFI_STA;
+//static const wifi_mode_t WIFI_MODE = WIFI_AP;
+
+// 接続するAPのSSIDとパスワード (STAモードの場合)
 static const char *SSID = "hogehoge";
 static const char *PASS = "piyopiyo";
 
@@ -40,23 +47,48 @@ void udpWiFiInit()
 {
     g_mutex = xSemaphoreCreateMutex();
     
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(SSID, PASS);
-    printf("WiFi started!\n");
-    
-    // wait for connecting to AP
-    while (WiFi.status() != WL_CONNECTED) {
-      vTaskDelay(500 / portTICK_PERIOD_MS);
-      Serial.print(".");
+    // STAモード
+    if(WIFI_MODE == WIFI_STA)
+    {
+        // STAモードでWiFi開始
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(SSID, PASS);
+        printf("WiFi started!\n");
+        
+        // APへの接続待ち
+        while (WiFi.status() != WL_CONNECTED) {
+          vTaskDelay(500 / portTICK_PERIOD_MS);
+          Serial.print(".");
+        }
+        // IPアドレス取得
+        localAddress = WiFi.localIP();
+        Serial.println("Connected to AP!");
+        Serial.print("STA IP address: "); Serial.println(localAddress);
     }
-    // get my own IP address
-    localAddress = WiFi.localIP();
-    Serial.println("Connected to AP!");
-    Serial.print("STA IP address: "); Serial.println(localAddress);
+    // APモード
+    else{
+        // 自分のSSIDとパスワード
+        char mySSID[16];
+        sprintf(mySSID, "ESP32-%06x", ESP.getEfuseMac());
+        char *myPassword = "12345678";
+        
+        // APモードでWiFi開始
+        WiFi.mode(WIFI_AP);
+        WiFi.softAP(mySSID, myPassword);
+        // IPアドレス取得
+        localAddress = WiFi.softAPIP();
+        Serial.print("AP SSID: ");Serial.println(mySSID);
+        Serial.print("AP IP address: ");Serial.println(localAddress);
+    }
+    // 最初はリモートアドレス無効
     remoteAddress = NULL_ADDR;
-  
-    // begin UDP
+    // UDPを開始
     udp.begin(LocalPort);
+    
+#ifdef USE_MDNS
+    // mDNSを開始 ホスト名 esp32.local
+    MDNS.begin("esp32");
+#endif
 }
 
 // UDP送信スレッド関数

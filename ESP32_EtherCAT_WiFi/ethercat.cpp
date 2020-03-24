@@ -304,10 +304,10 @@ void robot_arm_ctrl(void)
 				servo[i] = deg;
 			}
             xSemaphoreGive(g_mutex);
-			printf("%d ", servo[i]);
-			printf(",");
+			//printf("%d ", servo[i]);
+			//printf(",");
 		}
-		printf("\n");
+		//printf("\n");
 		
 		// UDP通信用変数更新
 		xSemaphoreTake(g_mutex, portMAX_DELAY);
