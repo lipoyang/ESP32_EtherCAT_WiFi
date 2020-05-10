@@ -2,8 +2,12 @@
 #include <string.h>
 #include <inttypes.h>
 
+#if defined(ARDUINO_M5Stack_Core_ESP32)
+#include <M5Stack.h>
+#else
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>
+#endif
 #include <SOEM.h>
 
 // グローバル変数
@@ -316,7 +320,24 @@ void robot_arm_ctrl(void)
 			g_volume[i] = volume[i];
 		}
 		xSemaphoreGive(g_mutex);
-		
+
+#if defined(ARDUINO_M5Stack_Core_ESP32)
+    // M5Stack 画面描画
+    static int count = 0;
+    static int oldval[4] = {0};
+    count++;
+    if(count >= 50){
+      count = 0;
+      for(int i=0;i<4;i++){
+        if(servo[i] != oldval[i]){
+          M5.Lcd.fillRect(210, 20+i*40, 80, 35, BLACK);
+        }
+        M5.Lcd.setCursor(210, 20+i*40);
+        M5.Lcd.printf("%3d", servo[i]);
+        oldval[i] = servo[i];
+      }
+    }
+#endif
 	}// while(true)
 
 	// 切断処理
